@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { loginUser } from '../api/userService';
+import '../assets/styles/login.css';
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -29,24 +30,23 @@ function Login() {
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center vh-100 position-relative">
+    <div className="d-flex justify-content-center align-items-center vh-100 position-relative login-container">
       <div className="position-absolute top-0 left-0 ms-3 mt-3">
         <img
-          src="../../assets/logo.png"
+          src="../assets/logo.png"
           alt="lenno"
-          style={{ height: '40px' }}
         />
       </div>
 
-      <div className="card p-4 shadow-lg w-50">
+      <div className="card p-4 shadow-lg w-50 card-container">
         <Link
           to="/"
-          className="btn btn-light position-absolute top-0 end-0 m-3"
+          className="btn btn-light position-absolute top-0 end-0 m-3 back-link"
         >
           &larr; Назад
         </Link>
 
-        <h2 className="mb-4 text-center">Вход</h2>
+        <h2 className="mb-4 text-center title">Вход</h2>
         {error && <p className="text-danger text-center">{error}</p>}
         {success && <p className="text-success text-center">{success}</p>}
         <form onSubmit={handleSubmit}>
@@ -54,7 +54,7 @@ function Login() {
             <label className="form-label">Почта</label>
             <input
               type="email"
-              className="form-control"
+              className="form-control input-field"
               placeholder="Введите почту"
               name="email"
               value={formData.email}
@@ -66,7 +66,7 @@ function Login() {
             <label className="form-label">Пароль</label>
             <input
               type="password"
-              className="form-control"
+              className="form-control password input-field"
               placeholder="Введите пароль"
               name="password"
               value={formData.password}
@@ -74,7 +74,7 @@ function Login() {
               required
             />
           </div>
-          <button type="submit" className="btn btn-primary w-100">
+          <button type="submit" className="btn submit-btn">
             Вход
           </button>
         </form>

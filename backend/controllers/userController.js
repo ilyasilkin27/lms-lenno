@@ -1,30 +1,78 @@
+import asyncHandler from 'express-async-handler';
+import pool from '../config/db.js';
 import bcrypt from 'bcryptjs';
-import { createUser } from '../models/userModel.js';
+import jwt from 'jsonwebtoken';
 
-const registerUser = async (req, res) => {
-  const { username, email, password } = req.body;
+const registerUser = asyncHandler(async (req, res) => {
+  const { name, login, password } = req.body;
 
-  if (!username || !email || !password) {
-    return res.status(400).json({ message: 'All fields are required' });
+  const result = await pool.query(
+    'SELECT * FROM public.users WHERE login = $1',
+    [login]
+  );
+
+  if (result.rows && result.rows.length > 0) {
+    res.status(400);
+    throw new Error('User already exists');
   }
 
   const salt = await bcrypt.genSalt(10);
-  const password_hash = await bcrypt.hash(password, salt);
+  const hashedPassword = await bcrypt.hash(password, salt);
 
-  try {
-    const newUser = await createUser(username, email, password_hash);
-    res.status(201).json({
-      message: 'User registered successfully',
-      user: {
-        id: newUser.user_id,
-        username: newUser.username,
-        email: newUser.email,
-      },
+  const role = 'teacher';
+
+  const newUser = await pool
+    .query(
+      'INSERT INTO users (name, login, password, role) VALUES ($1, $2, $3, $4) RETURNING *',
+      [name, login, hashedPassword, role]
+    )
+    .catch((err) => {
+      console.error('Error inserting user:', err.stack);
+      throw new Error('Failed to insert user');
     });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Error registering user' });
+
+  const user = newUser.rows[0];
+
+  if (user) {
+    res.status(201).json({
+      _id: user.id,
+      name: user.name,
+      login: user.login,
+      role: user.role,
+      token: generateToken(user.id),
+    });
+  } else {
+    res.status(400);
+    throw new Error('Invalid user data');
   }
+});
+
+const loginUser = asyncHandler(async (req, res) => {
+  const { login, password } = req.body;
+
+  const result = await pool.query('SELECT * FROM users WHERE login = $1', [
+    login,
+  ]);
+  const user = result.rows[0];
+
+  if (user && (await bcrypt.compare(password, user.password))) {
+    res.json({
+      _id: user.id,
+      name: user.name,
+      login: user.login,
+      role: user.role,
+      token: generateToken(user.id),
+    });
+  } else {
+    res.status(401);
+    throw new Error('Invalid login or password');
+  }
+});
+
+const generateToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
+    expiresIn: '30d',
+  });
 };
 
-export { registerUser };
+export { registerUser, loginUser };

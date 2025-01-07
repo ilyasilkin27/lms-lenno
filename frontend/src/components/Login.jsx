@@ -5,7 +5,7 @@ import '../assets/styles/login.css';
 
 function Login() {
   const [formData, setFormData] = useState({
-    email: '',
+    login: '',
     password: '',
   });
 
@@ -56,8 +56,8 @@ function Login() {
               type="email"
               className="form-control input-field"
               placeholder="Введите почту"
-              name="email"
-              value={formData.email}
+              name="login"
+              value={formData.login}
               onChange={handleChange}
               required
             />

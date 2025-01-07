@@ -3,6 +3,12 @@ import pool from '../config/db.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
+const generateToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
+    expiresIn: '30d',
+  });
+};
+
 const registerUser = asyncHandler(async (req, res) => {
   const { name, login, password } = req.body;
 
@@ -55,7 +61,14 @@ const loginUser = asyncHandler(async (req, res) => {
   ]);
   const user = result.rows[0];
 
-  if (user && (await bcrypt.compare(password, user.password))) {
+  if (!user) {
+    res.status(401);
+    throw new Error('User not found');
+  }
+
+  const isMatch = await bcrypt.compare(password, user.password);
+
+  if (user && isMatch) {
     res.json({
       _id: user.id,
       name: user.name,
@@ -68,11 +81,5 @@ const loginUser = asyncHandler(async (req, res) => {
     throw new Error('Invalid login or password');
   }
 });
-
-const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: '30d',
-  });
-};
 
 export { registerUser, loginUser };

@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { registerUser } from '../api/userService';
+import '../assets/styles/register.css';
+import logo from '../assets/logo.png';
 
 function Register() {
   const [formData, setFormData] = useState({
     name: '',
+    surname: '',
     login: '',
     password: '',
   });
@@ -31,12 +34,16 @@ function Register() {
 
   return (
     <div className="d-flex justify-content-center align-items-center vh-100 position-relative register-container">
-      <div className="position-absolute top-0 left-0 ms-3 mt-3">
-        <img
-          src="../../assets/logo.png"
-          alt="lenno"
-          style={{ height: '40px' }}
-        />
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          marginLeft: '10px',
+          marginTop: '10px',
+        }}
+      >
+        <img src={logo} alt="lenno" style={{ height: '150px' }} />
       </div>
 
       <div className="card p-4 shadow-lg w-50 card-container">
@@ -59,6 +66,18 @@ function Register() {
               placeholder="Введите имя"
               name="name"
               value={formData.name}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <label className="form-label">Фамилия</label>
+            <input
+              type="text"
+              className="form-control input-field"
+              placeholder="Введите фамилию"
+              name="surname"
+              value={formData.surname}
               onChange={handleChange}
               required
             />

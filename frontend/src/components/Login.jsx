@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { loginUser } from '../api/userService';
 import '../assets/styles/login.css';
+import logo from '../assets/logo.png';
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -31,11 +32,16 @@ function Login() {
 
   return (
     <div className="d-flex justify-content-center align-items-center vh-100 position-relative login-container">
-      <div className="position-absolute top-0 left-0 ms-3 mt-3">
-        <img
-          src="../assets/logo.png"
-          alt="lenno"
-        />
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          marginLeft: '10px',
+          marginTop: '10px',
+        }}
+      >
+        <img src={logo} alt="lenno" style={{ height: '150px' }} />
       </div>
 
       <div className="card p-4 shadow-lg w-50 card-container">

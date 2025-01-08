@@ -1,20 +1,23 @@
-import pkg from 'pg';
-const { Pool } = pkg;
+import { createClient } from '@supabase/supabase-js';
+import dotenv from 'dotenv';
 
-const pool = new Pool({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_DATABASE,
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT,
-});
+dotenv.config();
 
-const createUser = async (username, email, password_hash) => {
-  const query =
-    'INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3) RETURNING *';
-  const values = [username, email, password_hash];
-  const result = await pool.query(query, values);
-  return result.rows[0];
+const supabase = createClient(process.env.SUPABASE_URL, process.env.ANON_PUBLIC);
+
+const createUser = async (username, surname, email, password_hash) => {
+  const { data, error } = await supabase
+    .from('users')
+    .insert([
+      { username, surname, email, password_hash }
+    ])
+    .single();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data;
 };
 
 export { createUser };

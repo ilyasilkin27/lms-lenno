@@ -1,5 +1,5 @@
 import asyncHandler from 'express-async-handler';
-import pool from '../config/db.js';
+import supabase from '../config/supabase.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
@@ -9,17 +9,29 @@ const generateToken = (id) => {
   });
 };
 
+const checkExistingUser = async (login) => {
+  const { data, error } = await supabase
+    .from('users')
+    .select('*')
+    .eq('login', login)
+    .maybeSingle();
+
+  if (error) {
+    console.error('Error checking user:', error);
+    throw new Error('Failed to check if user exists');
+  }
+
+  return data;
+};
+
 const registerUser = asyncHandler(async (req, res) => {
-  const { name, login, password } = req.body;
+  const { name, surname, login, password } = req.body;
 
-  const result = await pool.query(
-    'SELECT * FROM public.users WHERE login = $1',
-    [login]
-  );
-
-  if (result.rows && result.rows.length > 0) {
-    res.status(400);
-    throw new Error('User already exists');
+  const existingUser = await checkExistingUser(login);
+  
+  if (existingUser) {
+    res.status(400).json({ message: 'User already exists' });
+    return;
   }
 
   const salt = await bcrypt.genSalt(10);
@@ -27,41 +39,44 @@ const registerUser = asyncHandler(async (req, res) => {
 
   const role = 'teacher';
 
-  const newUser = await pool
-    .query(
-      'INSERT INTO users (name, login, password, role) VALUES ($1, $2, $3, $4) RETURNING *',
-      [name, login, hashedPassword, role]
-    )
-    .catch((err) => {
-      console.error('Error inserting user:', err.stack);
-      throw new Error('Failed to insert user');
-    });
+  const { data: newUser, error: insertError } = await supabase
+    .from('users')
+    .insert([
+      { name, surname, login, password: hashedPassword, role }
+    ])
+    .select()
+    .single();
 
-  const user = newUser.rows[0];
+  if (insertError) {
+    console.error('Error inserting user:', insertError);
+    res.status(500).json({ message: 'Failed to insert user', error: insertError });
+    return;
+  }
 
-  if (user) {
+  if (newUser) {
     res.status(201).json({
-      _id: user.id,
-      name: user.name,
-      login: user.login,
-      role: user.role,
-      token: generateToken(user.id),
+      _id: newUser.id,
+      name: newUser.name,
+      login: newUser.login,
+      role: newUser.role,
+      token: generateToken(newUser.id),
     });
   } else {
-    res.status(400);
-    throw new Error('Invalid user data');
+    console.error('Error: No user data returned');
+    res.status(400).json({ message: 'Invalid user data', error: 'No data returned from insert' });
   }
 });
 
 const loginUser = asyncHandler(async (req, res) => {
   const { login, password } = req.body;
 
-  const result = await pool.query('SELECT * FROM users WHERE login = $1', [
-    login,
-  ]);
-  const user = result.rows[0];
+  const { data: user, error } = await supabase
+    .from('users')
+    .select('*')
+    .eq('login', login)
+    .single();
 
-  if (!user) {
+  if (error || !user) {
     res.status(401);
     throw new Error('User not found');
   }
@@ -72,6 +87,7 @@ const loginUser = asyncHandler(async (req, res) => {
     res.json({
       _id: user.id,
       name: user.name,
+      surname: user.surname,
       login: user.login,
       role: user.role,
       token: generateToken(user.id),

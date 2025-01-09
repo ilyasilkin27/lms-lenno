@@ -17,8 +17,8 @@
     }
 
     .btn-custom:focus {
-        outline: none;
-        box-shadow: 0 0 0 3px rgba(212, 189, 19, 0.5);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(212, 189, 19, 0.5);
     }
 
     .btn-outline-custom {
@@ -28,7 +28,8 @@
     }
 
     .btn-outline-custom:focus {
-        outline: none;
-        box-shadow: 0 0 0 3px rgba(212, 189, 19, 0.5);
-      }  }
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(212, 189, 19, 0.5);
+    }
+  }
 }

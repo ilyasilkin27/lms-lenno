@@ -12,11 +12,10 @@ const corsOptions = {
 const app = express();
 const port = 5001;
 
+app.use(cors(corsOptions));
 app.use(express.json());
-
 app.use(userRoutes);
 app.use(errorHandler);
-app.use(cors(corsOptions));
 
 app.listen(port, () => {
   console.log(`User service is running on http://localhost:${port}`);

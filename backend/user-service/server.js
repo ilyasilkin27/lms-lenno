@@ -4,7 +4,7 @@ import userRoutes from './routes/userRoutes.js';
 import errorHandler from './middlewares/errorMiddleware.js';
 
 const corsOptions = {
-  origin: 'https://lms-lenno-frontend.vercel.app',
+  origin: 'http://localhost:3000',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 };

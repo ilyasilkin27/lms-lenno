@@ -6,7 +6,7 @@ import authRoutes from './routes/authRoutes.js';
 dotenv.config();
 
 const corsOptions = {
-  origin: 'https://lms-lenno-frontend.vercel.app',
+  origin: 'http://localhost:3000',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 };
@@ -17,7 +17,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use('/api/auth', authRoutes);
 
-const PORT = process.env.PORT || 5000;
+const PORT = 5000;
 app.listen(PORT, () => {
   console.log(`Auth service running on port ${PORT}`);
 });

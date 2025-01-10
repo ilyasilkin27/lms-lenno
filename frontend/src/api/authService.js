@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const USER_SERVICE_API_URL = 'https://lms-lenno-user-service.onrender.com/api/users';
+const USER_SERVICE_API_URL = 'http://localhost:5001/users';
 
 export const registerUser = async (userData) => {
   try {

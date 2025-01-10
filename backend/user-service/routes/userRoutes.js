@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.get('/api/users/:login', async (req, res) => {
   const { login } = req.params;
-
+  
   try {
     const user = await checkExistingUser(login);
     if (user) {

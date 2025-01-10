@@ -45,9 +45,9 @@ const registerUser = asyncHandler(async (req, res) => {
 
 const loginUser = asyncHandler(async (req, res) => {
   const { login, password } = req.body;
-
+  
   const response = await axios.get(`${USER_SERVICE_URL}/${login}`);
-
+  
   const user = response.data;
 
   if (!user) {

@@ -22,8 +22,11 @@ export const loginUser = async (userData) => {
         'Content-Type': 'application/json',
       },
     });
+    
     return response.data;
   } catch (error) {
+    console.error('Login error:', error);
+
     throw new Error(error.response?.data?.message || 'Ошибка входа');
   }
 };

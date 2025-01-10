@@ -1,6 +1,6 @@
 import express from 'express';
 import userRoutes from './routes/userRoutes.js';
-import errorHandler from '../middlewares/errorMiddleware.js';
+import errorHandler from './middlewares/errorMiddleware.js';
 
 const app = express();
 const port = 5001;

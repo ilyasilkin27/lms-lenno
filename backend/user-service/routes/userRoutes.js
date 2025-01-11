@@ -1,19 +1,20 @@
 import express from 'express';
-import { checkExistingUser, createUser } from '../controllers/userController.js';
+import {
+  checkExistingUser,
+  createUser,
+} from '../controllers/userController.js';
 
 const router = express.Router();
 
-router.get('/api/users/:login', async (req, res) => {
-  const { login } = req.params;
-  
+router.post('/api/users/login', async (req, res) => {
+  const { login, password } = req.body;
+
   try {
-    const user = await checkExistingUser(login);
-    if (user) {
-      return res.json(user);
-    }
-    return res.status(404).json({ message: 'User not found' });
+    const user = await checkExistingUser(login, password);
+
+    return res.json(user);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(401).json({ message: error.message });
   }
 });
 

@@ -1,4 +1,5 @@
 import supabase from '../config/supabase.js';
+import bcrypt from 'bcryptjs';
 
 const checkExistingUser = async (login, password) => {
   const { data, error } = await supabase
@@ -17,6 +18,7 @@ const checkExistingUser = async (login, password) => {
   }
 
   const isPasswordValid = await bcrypt.compare(password, data.password);
+
   if (!isPasswordValid) {
     throw new Error('Invalid password');
   }
@@ -24,7 +26,9 @@ const checkExistingUser = async (login, password) => {
   return data;
 };
 
-const createUser = async (name, surname, login, password_hash, role = 'teacher') => {
+const createUser = async (name, surname, login, password, role = 'teacher') => {
+  const salt = await bcrypt.genSalt(10);
+  const password_hash = await bcrypt.hash(password, salt);
   const { data, error } = await supabase
     .from('users')
     .insert([{ name, surname, login, password: password_hash, role }])

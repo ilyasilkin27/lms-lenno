@@ -7,7 +7,7 @@ const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' });
 };
 
-const USER_SERVICE_URL = 'http://localhost:5001/users';
+const USER_SERVICE_URL = 'http://localhost:5001/api/users';
 
 const registerUser = asyncHandler(async (req, res) => {
   const { name, surname, login, password } = req.body;

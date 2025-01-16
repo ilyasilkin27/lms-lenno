@@ -27,8 +27,8 @@ const checkExistingUser = async (login, password) => {
 };
 
 const validateInput = (name, surname, password) => {
-  const namePattern = /^[a-zA-Z\-]{3,30}$/;
-  const surnamePattern = /^[a-zA-Z\-]{3,30}$/;
+  const namePattern = /^[a-zA-Zа-яА-я\-]{3,30}$/;
+  const surnamePattern = /^[a-zA-Zа-яА-я\-]{3,30}$/;
   const passwordPattern = /^[^\s]{8,}$/;
 
   if (!namePattern.test(name)) {

@@ -1,7 +1,7 @@
 # Документация API
 
 ## Ссылки на сервисы
-- **Frontend**: [фронтенд](https://lms-lenno-frontend.vercel.app)
+- **Frontend**: [фронтенд](http://localhost:3000)
 - **User Service**: [юзерс-савис](https://lms-lenno-user-service.onrender.com/api/users)
 - **Auth Service**: [ауф-савис](https://lms-lenno-auth-service.onrender.com)
 

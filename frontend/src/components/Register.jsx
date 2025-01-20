@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { registerUser } from '../api/authService';
+import { registerUser } from '../api/registerUser.js';
 import '../assets/styles/register.css';
 import logo from '../assets/logo.png';
 

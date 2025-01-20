@@ -1,24 +1,30 @@
 version: '3.9'
 
 services:
-  auth-service:
+  login-service:
     build:
-      context: ./auth-service
+      context: ./loginService
     ports:
       - "5000:5000"
     environment:
-      - USER_SERVICE_URL=http://user-service:5001
+      - REGISTER_SERVICE_URL=http://register-service:5001
     depends_on:
-      - user-service
+      - register-service
+    networks:
+      - backend-network
 
-  user-service:
+  register-service:
     build:
-      context: ./user-service
+      context: ./registerService
     ports:
       - "5001:5001"
     environment:
       - SUPABASE_URL=${SUPABASE_URL}
-      - SERVICE_ROLE=${SERVICE_ROLE}
+      - SUPBASE_KEY=${SUPBASE_KEY}
+    networks:
+      - backend-network
+    volumes:
+      - ../.env:/app/.env
 
   frontend:
     build:
@@ -26,5 +32,13 @@ services:
     ports:
       - "3000:3000"
     depends_on:
-      - auth-service
-      - user-service
+      - login-service
+      - register-service
+    networks:
+      - frontend-network
+
+networks:
+  backend-network:
+    driver: bridge
+  frontend-network:
+    driver: bridge

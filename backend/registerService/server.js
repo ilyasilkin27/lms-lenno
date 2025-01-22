@@ -2,9 +2,12 @@ import express from 'express';
 import cors from 'cors';
 import routes from './routes.js';
 import errorHandler from '../middlewares/errorMiddleware.mjs';
+import dotenv from 'dotenv';
+
+dotenv.config({ path: '../.env' });
 
 const corsOptions = {
-  origin: 'http://localhost:3000',
+  origin: `${process.env.FRONT_DEV_URL || 'https://lms-lenno-frontend.vercel.app'}`,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 };

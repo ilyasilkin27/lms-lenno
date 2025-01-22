@@ -9,6 +9,6 @@ RUN npm install
 COPY loginService/ ./
 COPY middlewares /app/middlewares
 
-EXPOSE 5001
+EXPOSE 5000
 
 CMD ["npm", "start"]

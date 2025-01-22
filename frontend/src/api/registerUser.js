@@ -3,7 +3,7 @@ import axios from 'axios';
 export const registerUser = async (userData) => {
   try {
     const response = await axios.post(
-      'http://localhost:5001/api/register',
+      `${process.env.REACT_APP_REG_DEV_URL || 'https://register-service-6wmk.onrender.com'}/api/register`,
       userData,
       {
         headers: {

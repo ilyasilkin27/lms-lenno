@@ -1,12 +1,13 @@
 FROM node:18-alpine
 
-WORKDIR /app
+WORKDIR /app/registerService
 
-COPY ./package*.json ./
+COPY registerService/package*.json ./
 
 RUN npm install
 
-COPY ./ ./
+COPY registerService/ ./
+COPY middlewares /app/middlewares
 
 EXPOSE 5001
 

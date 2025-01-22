@@ -3,39 +3,43 @@ version: '3.9'
 services:
   login-service:
     build:
-      context: ./loginService
+      context: ./
+      dockerfile: loginService/Dockerfile
     ports:
-      - "5000:5000"
+      - '5000:5000'
     environment:
       - REGISTER_SERVICE_URL=http://register-service:5001
     depends_on:
       - register-service
     networks:
       - backend-network
+    volumes:
+      - ./.env:/app/.env
 
   register-service:
     build:
-      context: ./registerService
+      context: ./
+      dockerfile: registerService/Dockerfile
     ports:
-      - "5001:5001"
+      - '5001:5001'
     environment:
       - SUPABASE_URL=${SUPABASE_URL}
       - SUPBASE_KEY=${SUPBASE_KEY}
     networks:
       - backend-network
     volumes:
-      - ../.env:/app/.env
+      - ./.env:/app/.env
 
   frontend:
     build:
       context: ../frontend
     ports:
-      - "3000:3000"
+      - '3000:3000'
     depends_on:
       - login-service
       - register-service
     networks:
-      - frontend-network
+      - backend-network
 
 networks:
   backend-network:

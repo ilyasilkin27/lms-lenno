@@ -1,13 +1,14 @@
 FROM node:18-alpine
 
-WORKDIR /app
+WORKDIR /app/loginService
 
-COPY ./package*.json ./
+COPY loginService/package*.json ./
 
 RUN npm install
 
-COPY ./ ./
+COPY loginService/ ./
+COPY middlewares /app/middlewares
 
-EXPOSE 5000
+EXPOSE 5001
 
 CMD ["npm", "start"]

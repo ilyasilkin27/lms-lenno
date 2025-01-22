@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import routes from './routes.js';
-import errorHandler from '../middlewares/errorMiddleware.js';
+import errorHandler from '../middlewares/errorMiddleware.mjs';
 
 const corsOptions = {
   origin: 'http://localhost:3000',

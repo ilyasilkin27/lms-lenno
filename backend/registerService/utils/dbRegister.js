@@ -1,4 +1,4 @@
-import supabase from '../../db/supabase.js';
+import supabase from '../db/supabase.js';
 import bcrypt from 'bcryptjs';
 
 const validateInput = (name, surname, password) => {

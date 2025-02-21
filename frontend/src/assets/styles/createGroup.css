@@ -1,0 +1,53 @@
+.create-group-container {
+  background-color: #2d3a3f;
+
+  .card-container {
+    background-color: #2d3a3f;
+    color: #fff;
+
+    .title {
+      color: #d4bd13;
+    }
+
+    .btn-custom {
+      background-color: #d4bd13;
+      color: #fff;
+      border: none;
+    }
+
+    .btn-custom:hover {
+      background-color: #c0a910;
+    }
+
+    .input-field {
+      background-color: #3a4a50;
+      color: #fff;
+      border: 1px solid #4a5a60;
+    }
+
+    .input-field:focus {
+      background-color: #3a4a50;
+      color: #fff;
+      border-color: #d4bd13;
+      box-shadow: 0 0 0 3px rgba(212, 189, 19, 0.5);
+    }
+
+    .submit-btn {
+      background-color: #d4bd13;
+      color: #fff;
+      width: 100%;
+      padding: 10px;
+      font-size: 1.1rem;
+      border: none;
+    }
+
+    .submit-btn:hover {
+      background-color: #c0a910;
+    }
+
+    .badge {
+      font-size: 0.9rem;
+      padding: 0.5em 0.75em;
+    }
+  }
+} 

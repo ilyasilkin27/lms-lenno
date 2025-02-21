@@ -30,6 +30,19 @@ services:
     volumes:
       - ./.env:/app/.env
 
+  group-service:
+    build:
+      context: ./
+      dockerfile: groupService/Dockerfile
+    ports:
+      - '5002:5002'
+    environment:
+      - LOGIN_SERVICE_URL=http://login-service:5000
+    networks:
+      - backend-network
+    volumes:
+      - ./.env:/app/.env
+
   frontend:
     build:
       context: ../frontend

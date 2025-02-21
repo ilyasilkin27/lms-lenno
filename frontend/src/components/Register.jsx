@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { registerUser } from '../api/registerUser.js';
 import '../assets/styles/register.css';
 import logo from '../assets/logo.png';
 
 function Register() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
     surname: '',
@@ -26,6 +27,7 @@ function Register() {
       await registerUser(formData);
       setSuccess('Регистрация прошла успешно!');
       setError('');
+      navigate('/dashboard');
     } catch (err) {
       setError(err.message);
       setSuccess('');

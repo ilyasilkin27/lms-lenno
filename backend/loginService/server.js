@@ -13,7 +13,7 @@ const corsOptions = {
 };
 
 const app = express();
-const port = 5000;
+const port = 4001;
 
 app.use(cors(corsOptions));
 app.use(express.json());

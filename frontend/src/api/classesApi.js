@@ -8,7 +8,7 @@ export const createClass = async (classData) => {
 
     const response = await axios.post(
       `${
-        process.env.REACT_APP_CLASS_URL || "http://localhost:4003"
+        process.env.REACT_APP_CLASS_URL || "https://class-service.onrender.com"
       }/api/classes`,
       classData
     );

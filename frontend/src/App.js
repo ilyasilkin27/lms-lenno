@@ -5,6 +5,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import Dashboard from './components/Dashboard';
 import CreateGroup from './components/CreateGroup';
+import CreateDiscipline from './components/CreateDiscipline';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/create-group" element={<CreateGroup />} />
+        <Route path="/create-discipline" element={<CreateDiscipline />} />
       </Routes>
     </Router>
   );

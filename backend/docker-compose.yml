@@ -54,6 +54,22 @@ services:
     networks:
       - backend-network
 
+  class-service:
+    build:
+      context: ./
+      dockerfile: classService/Dockerfile
+    ports:
+      - '4003:4003'
+    environment:
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPBASE_KEY=${SUPBASE_KEY}
+    networks:
+      - backend-network
+    volumes:
+      - ./.env:/app/.env
+    depends_on:
+      - register-service
+
 networks:
   backend-network:
     driver: bridge

@@ -70,6 +70,23 @@ services:
     depends_on:
       - register-service
 
+  calendar-service:
+    build:
+      context: ./
+      dockerfile: calendarService/Dockerfile
+    ports:
+      - '4004:4004'
+    environment:
+      - GCALENDAR_KEY=${GCALENDAR_KEY}
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPBASE_KEY=${SUPBASE_KEY}
+    networks:
+      - backend-network
+    volumes:
+      - ./.env:/app/.env
+    depends_on:
+      - register-service
+
 networks:
   backend-network:
     driver: bridge

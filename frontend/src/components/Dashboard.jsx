@@ -1,9 +1,59 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { Calendar, momentLocalizer } from 'react-big-calendar';
+import moment from 'moment';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
 import '../assets/styles/dashboard.css';
 import logo from '../assets/logo.png';
+import { getAllEvents, createEvent } from '../api/calendarApi';
 
-function Dashboard() {
+const localizer = momentLocalizer(moment);
+
+const Dashboard = () => {
+  const [events, setEvents] = useState([]);
+
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const eventsData = await getAllEvents();
+        const formattedEvents = eventsData.map(event => ({
+          title: event.summary,
+          start: new Date(event.start.dateTime),
+          end: new Date(event.end.dateTime),
+        }));
+        setEvents(formattedEvents);
+      } catch (error) {
+        console.error('Ошибка при загрузке событий:', error);
+      }
+    };
+
+    fetchEvents();
+  }, []);
+
+  const handleSelectSlot = async (slotInfo) => {
+    const { start, end } = slotInfo;
+    const eventTitle = prompt('Введите название события:');
+    if (eventTitle) {
+      try {
+        const eventData = {
+          summary: eventTitle,
+          startDateTime: start.toISOString(),
+          endDateTime: end.toISOString(),
+        };
+        const createdEvent = await createEvent(eventData);
+        const formattedEvent = {
+          title: createdEvent.summary,
+          start: new Date(createdEvent.start.dateTime),
+          end: new Date(createdEvent.end.dateTime),
+        };
+        setEvents([...events, formattedEvent]);
+        alert('Событие успешно создано!');
+      } catch (error) {
+        alert('Ошибка при создании события: ' + error.message);
+      }
+    }
+  };
+
   return (
     <div className="d-flex justify-content-center align-items-center vh-100 position-relative dashboard-container">
       <div
@@ -40,10 +90,22 @@ function Dashboard() {
               Создать ученика
             </Link>
           </div>
+          <div className="mt-4 w-100">
+            <h3>Календарь событий</h3>
+            <Calendar
+              localizer={localizer}
+              events={events}
+              startAccessor="start"
+              endAccessor="end"
+              style={{ height: 500 }}
+              selectable
+              onSelectSlot={handleSelectSlot}
+            />
+          </div>
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default Dashboard;

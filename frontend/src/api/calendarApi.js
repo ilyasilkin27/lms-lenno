@@ -3,7 +3,7 @@ import axios from "axios";
 export const createEvent = async (eventData) => {
   try {
     const response = await axios.post(
-      `${process.env.REACT_APP_CALENDAR_URL || "http://localhost:4004"}/api/calendar/events`,
+      `${process.env.REACT_APP_CALENDAR_URL || "https://calendar-servie.onrender.com"}/api/calendar/events`,
       eventData
     );
     return response.data;
@@ -21,7 +21,7 @@ export const createEvent = async (eventData) => {
 export const getAllEvents = async () => {
   try {
     const response = await axios.get(
-      `${process.env.REACT_APP_CALENDAR_URL || "http://localhost:4004"}/api/calendar/events`
+      `${process.env.REACT_APP_CALENDAR_URL || "https://calendar-servie.onrender.com"}/api/calendar/events`
     );
     return response.data;
   } catch (error) {
@@ -34,7 +34,7 @@ export const getAllEvents = async () => {
 export const getEventById = async (id) => {
   try {
     const response = await axios.get(
-      `${process.env.REACT_APP_CALENDAR_URL || "http://localhost:4004"}/api/calendar/events/${id}`
+      `${process.env.REACT_APP_CALENDAR_URL || "https://calendar-servie.onrender.com"}/api/calendar/events/${id}`
     );
     return response.data;
   } catch (error) {
@@ -47,7 +47,7 @@ export const getEventById = async (id) => {
 export const updateEvent = async (id, eventData) => {
   try {
     const response = await axios.put(
-      `${process.env.REACT_APP_CALENDAR_URL || "http://localhost:4004"}/api/calendar/events/${id}`,
+      `${process.env.REACT_APP_CALENDAR_URL || "https://calendar-servie.onrender.com"}/api/calendar/events/${id}`,
       eventData
     );
     return response.data;
@@ -61,7 +61,7 @@ export const updateEvent = async (id, eventData) => {
 export const deleteEvent = async (id) => {
   try {
     await axios.delete(
-      `${process.env.REACT_APP_CALENDAR_URL || "http://localhost:4004"}/api/calendar/events/${id}`
+      `${process.env.REACT_APP_CALENDAR_URL || "https://calendar-servie.onrender.com"}/api/calendar/events/${id}`
     );
   } catch (error) {
     throw new Error(

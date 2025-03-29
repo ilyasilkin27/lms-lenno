@@ -84,6 +84,7 @@ services:
       - backend-network
     volumes:
       - ./.env:/app/.env
+      - ./calendarService/client_secret.json:/app/calendarService/client_secret.json:ro
     depends_on:
       - register-service
 

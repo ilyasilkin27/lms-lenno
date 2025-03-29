@@ -1,5 +1,6 @@
 import { google } from 'googleapis';
 import dotenv from 'dotenv';
+import supabase from '../db/supabase.js';
 
 dotenv.config({ path: '../.env' });
 
@@ -71,11 +72,53 @@ const createEvent = async (eventDetails) => {
       sendUpdates: 'all',
     });
 
-    return response.data;
+    const { data: savedEvent, error: saveError } = await supabase
+      .from('calendar_events')
+      .insert([
+        {
+          google_event_id: response.data.id,
+          summary: eventDetails.summary,
+          location: eventDetails.location,
+          description: eventDetails.description,
+          start_date_time: eventDetails.startDateTime,
+          end_date_time: eventDetails.endDateTime,
+          attendees: formattedAttendees,
+          created_by: eventDetails.userId || null
+        }
+      ])
+      .select()
+      .single();
+
+    if (saveError) {
+      console.error('Error saving event to Supabase:', saveError);
+      throw new Error('Failed to save event to database');
+    }
+
+    return savedEvent;
   } catch (error) {
     console.error('Error creating calendar event:', error);
     throw new Error(`Failed to create calendar event: ${error.message}`);
   }
 };
 
-export { createEvent }; 
+const getEvents = async (userId) => {
+  try {
+    const { data: events, error } = await supabase
+      .from('calendar_events')
+      .select('*')
+      .eq('created_by', userId)
+      .order('start_date_time', { ascending: true });
+
+    if (error) {
+      console.error('Error fetching events from Supabase:', error);
+      throw new Error('Failed to fetch events from database');
+    }
+
+    return events;
+  } catch (error) {
+    console.error('Error getting events:', error);
+    throw new Error(`Failed to get events: ${error.message}`);
+  }
+};
+
+export { createEvent, getEvents }; 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { loginUser } from '../api/loginUser.js';
-import '../assets/styles/login.css';
+import 'bootstrap/dist/css/bootstrap.min.css'; // Ensure Bootstrap is imported
 import logo from '../assets/logo.png';
 
 function Login() {
@@ -31,28 +31,28 @@ function Login() {
   };
 
   return (
-    <div className='flex justify-center items-center h-screen relative login-container'>
-      <div className='absolute top-0 left-0 ml-2 mt-2'>
+    <div className='d-flex justify-content-center align-items-center min-vh-100 login-container'>
+      <div className='position-absolute top-0 start-0 ms-2 mt-2'>
         <img src={logo} alt='lenno' className='h-36' />
       </div>
 
-      <div className='bg-white p-4 shadow-lg w-1/2 card-container'>
+      <div className='bg-white p-4 shadow-lg w-50 card-container'>
         <Link
           to='/'
-          className='absolute top-0 right-0 m-3 bg-gray-200 text-gray-800 py-2 px-4 rounded'
+          className='position-absolute top-0 end-0 m-3 btn btn-secondary'
         >
           &larr; Назад
         </Link>
 
-        <h2 className='mb-4 text-center text-2xl font-bold'>Вход</h2>
-        {error && <p className='text-red-500 text-center'>{error}</p>}
-        {success && <p className='text-green-500 text-center'>{success}</p>}
+        <h2 className='mb-4 text-center'>Вход</h2>
+        {error && <p className='text-danger text-center'>{error}</p>}
+        {success && <p className='text-success text-center'>{success}</p>}
         <form onSubmit={handleSubmit}>
           <div className='mb-3'>
-            <label className='block mb-1'>Почта</label>
+            <label className='form-label'>Почта</label>
             <input
               type='email'
-              className='border rounded p-2 w-full'
+              className='form-control'
               placeholder='Введите почту'
               name='login'
               value={formData.login}
@@ -61,10 +61,10 @@ function Login() {
             />
           </div>
           <div className='mb-3'>
-            <label className='block mb-1'>Пароль</label>
+            <label className='form-label'>Пароль</label>
             <input
               type='password'
-              className='border rounded p-2 w-full'
+              className='form-control'
               placeholder='Введите пароль'
               name='password'
               value={formData.password}
@@ -74,7 +74,7 @@ function Login() {
           </div>
           <button
             type='submit'
-            className='bg-blue-500 text-white py-2 px-4 rounded'
+            className='btn btn-primary w-100'
           >
             Вход
           </button>

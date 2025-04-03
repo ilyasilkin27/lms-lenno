@@ -1,4 +1,4 @@
-[![Ru](https://img.shields.io/badge/Rus-blue)](README_ru.md)
+[![Ru](https://img.shields.io/badge/Rus-blue)](README.ru.md)
 [![Live](https://img.shields.io/badge/Live-pink)](https://lms-lenno-frontend.vercel.app)
 
 ### Project Description

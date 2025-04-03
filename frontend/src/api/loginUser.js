@@ -3,7 +3,7 @@ import axios from 'axios';
 export const loginUser = async (userData) => {
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_LOGIN_DEV_URL || 'https://login-service-60nh.onrender.com'}/api/login`,
+        `${process.env.REACT_APP_LOGIN_URL || 'https://login-service-60nh.onrender.com'}/api/login`,
         userData,
         {
           headers: {

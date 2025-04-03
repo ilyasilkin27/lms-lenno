@@ -21,7 +21,8 @@ const createEvent = async (eventDetails) => {
       universe_domain: 'googleapis.com'
     };
 
-    console.log('Using credentials for:', credentials.client_email);
+    console.log('Service Account Email:', credentials.client_email);
+    console.log('Creating event with details:', eventDetails);
 
     if (!credentials.client_email || !credentials.private_key) {
       throw new Error('Missing Google credentials in environment variables');
@@ -32,11 +33,17 @@ const createEvent = async (eventDetails) => {
       scopes: [
         'https://www.googleapis.com/auth/calendar',
         'https://www.googleapis.com/auth/calendar.events'
-      ],
+      ]
     });
 
     const authClient = await auth.getClient();
     google.options({ auth: authClient });
+
+    // Get calendar details
+    const calendarDetails = await calendar.calendars.get({
+      calendarId: 'primary'
+    });
+    console.log('Calendar Details:', calendarDetails.data);
 
     const formattedAttendees = eventDetails.attendees?.map(attendee => ({
       email: attendee.email,
@@ -71,6 +78,7 @@ const createEvent = async (eventDetails) => {
       sendUpdates: 'all',
     });
 
+    console.log('Event created successfully:', response.data);
     return response.data;
   } catch (error) {
     console.error('Error creating calendar event:', error);
@@ -103,7 +111,7 @@ const getEvents = async () => {
       scopes: [
         'https://www.googleapis.com/auth/calendar',
         'https://www.googleapis.com/auth/calendar.events'
-      ],
+      ]
     });
 
     const authClient = await auth.getClient();

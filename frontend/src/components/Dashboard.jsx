@@ -131,12 +131,6 @@ const Dashboard = () => {
             >
               Создать дисциплину
             </Link>
-            <Link
-              to="/create-student"
-              className="btn btn-custom btn-lg"
-            >
-              Создать ученика
-            </Link>
           </div>
           <div className="mt-4 w-100">
             <h3>Календарь событий</h3>

@@ -5,7 +5,7 @@ import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import '../assets/styles/dashboard.css';
 import logo from '../assets/logo.png';
-import { getAllEvents, createEvent } from '../api/calendarApi';
+import { getAllEvents, createEvent, deleteEvent } from '../api/calendarApi';
 
 const localizer = momentLocalizer(moment);
 
@@ -17,6 +17,7 @@ const Dashboard = () => {
       try {
         const eventsData = await getAllEvents();
         const formattedEvents = eventsData.map(event => ({
+          id: event.id,
           title: event.summary,
           start: new Date(event.start.dateTime),
           end: new Date(event.end.dateTime),
@@ -42,6 +43,7 @@ const Dashboard = () => {
         };
         const createdEvent = await createEvent(eventData);
         const formattedEvent = {
+          id: createdEvent.id,
           title: createdEvent.summary,
           start: new Date(createdEvent.start.dateTime),
           end: new Date(createdEvent.end.dateTime),
@@ -50,6 +52,18 @@ const Dashboard = () => {
         alert('Событие успешно создано!');
       } catch (error) {
         alert('Ошибка при создании события: ' + error.message);
+      }
+    }
+  };
+
+  const handleSelectEvent = async (event) => {
+    if (window.confirm('Вы уверены, что хотите удалить это событие?')) {
+      try {
+        await deleteEvent(event.id);
+        setEvents(events.filter(e => e.id !== event.id));
+        alert('Событие успешно удалено!');
+      } catch (error) {
+        alert('Ошибка при удалении события: ' + error.message);
       }
     }
   };
@@ -100,6 +114,7 @@ const Dashboard = () => {
               style={{ height: 500 }}
               selectable
               onSelectSlot={handleSelectSlot}
+              onSelectEvent={handleSelectEvent}
             />
           </div>
         </div>

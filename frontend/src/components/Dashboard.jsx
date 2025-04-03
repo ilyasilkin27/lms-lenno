@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
+import { Modal, Button, Form } from 'react-bootstrap';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import '../assets/styles/dashboard.css';
+import '../assets/styles/modal.css';
 import logo from '../assets/logo.png';
 import { getAllEvents, createEvent, deleteEvent } from '../api/calendarApi';
 
@@ -11,6 +13,11 @@ const localizer = momentLocalizer(moment);
 
 const Dashboard = () => {
   const [events, setEvents] = useState([]);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [newEventTitle, setNewEventTitle] = useState('');
+  const [selectedSlot, setSelectedSlot] = useState(null);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -31,40 +38,48 @@ const Dashboard = () => {
     fetchEvents();
   }, []);
 
-  const handleSelectSlot = async (slotInfo) => {
-    const { start, end } = slotInfo;
-    const eventTitle = prompt('Введите название события:');
-    if (eventTitle) {
-      try {
-        const eventData = {
-          summary: eventTitle,
-          startDateTime: start.toISOString(),
-          endDateTime: end.toISOString(),
-        };
-        const createdEvent = await createEvent(eventData);
-        const formattedEvent = {
-          id: createdEvent.id,
-          title: createdEvent.summary,
-          start: new Date(createdEvent.start.dateTime),
-          end: new Date(createdEvent.end.dateTime),
-        };
-        setEvents([...events, formattedEvent]);
-        alert('Событие успешно создано!');
-      } catch (error) {
-        alert('Ошибка при создании события: ' + error.message);
-      }
+  const handleSelectSlot = (slotInfo) => {
+    setSelectedSlot(slotInfo);
+    setShowCreateModal(true);
+  };
+
+  const handleCreateEvent = async () => {
+    if (!newEventTitle.trim()) return;
+
+    try {
+      const eventData = {
+        summary: newEventTitle,
+        startDateTime: selectedSlot.start.toISOString(),
+        endDateTime: selectedSlot.end.toISOString(),
+      };
+      const createdEvent = await createEvent(eventData);
+      const formattedEvent = {
+        id: createdEvent.id,
+        title: createdEvent.summary,
+        start: new Date(createdEvent.start.dateTime),
+        end: new Date(createdEvent.end.dateTime),
+      };
+      setEvents([...events, formattedEvent]);
+      setShowCreateModal(false);
+      setNewEventTitle('');
+    } catch (error) {
+      console.error('Ошибка при создании события:', error);
     }
   };
 
-  const handleSelectEvent = async (event) => {
-    if (window.confirm('Вы уверены, что хотите удалить это событие?')) {
-      try {
-        await deleteEvent(event.id);
-        setEvents(events.filter(e => e.id !== event.id));
-        alert('Событие успешно удалено!');
-      } catch (error) {
-        alert('Ошибка при удалении события: ' + error.message);
-      }
+  const handleSelectEvent = (event) => {
+    setSelectedEvent(event);
+    setShowDeleteModal(true);
+  };
+
+  const handleDeleteEvent = async () => {
+    try {
+      await deleteEvent(selectedEvent.id);
+      setEvents(events.filter(e => e.id !== selectedEvent.id));
+      setShowDeleteModal(false);
+      setSelectedEvent(null);
+    } catch (error) {
+      console.error('Ошибка при удалении события:', error);
     }
   };
 
@@ -119,6 +134,69 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+
+      {/* Create Event Modal */}
+      <Modal show={showCreateModal} onHide={() => setShowCreateModal(false)} centered>
+        <Modal.Header closeButton className="modal-header">
+          <Modal.Title className="modal-title">Создание события</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group>
+              <Form.Label>Название события</Form.Label>
+              <Form.Control
+                type="text"
+                value={newEventTitle}
+                onChange={(e) => setNewEventTitle(e.target.value)}
+                placeholder="Введите название события"
+                className="modal-input"
+              />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer className="modal-footer">
+          <Button 
+            variant="secondary" 
+            onClick={() => setShowCreateModal(false)}
+            className="modal-btn-secondary"
+          >
+            Отмена
+          </Button>
+          <Button 
+            variant="primary" 
+            onClick={handleCreateEvent}
+            className="modal-btn-primary"
+          >
+            Создать
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Delete Event Modal */}
+      <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)} centered>
+        <Modal.Header closeButton className="modal-header">
+          <Modal.Title className="modal-title">Удаление события</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          Вы уверены, что хотите удалить событие "{selectedEvent?.title}"?
+        </Modal.Body>
+        <Modal.Footer className="modal-footer">
+          <Button 
+            variant="secondary" 
+            onClick={() => setShowDeleteModal(false)}
+            className="modal-btn-secondary"
+          >
+            Отмена
+          </Button>
+          <Button 
+            variant="danger" 
+            onClick={handleDeleteEvent}
+            className="modal-btn-danger"
+          >
+            Удалить
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

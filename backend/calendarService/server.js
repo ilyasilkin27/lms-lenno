@@ -21,7 +21,6 @@ const corsOptions = {
 const app = express();
 const port = 4004;
 
-// Handle preflight requests
 app.options('*', cors(corsOptions));
 
 app.use(cors(corsOptions));

@@ -1,0 +1,76 @@
+.modal-content {
+  background-color: #2d3a3f !important;
+  color: #fff !important;
+  border: 1px solid #d4bd13 !important;
+}
+
+.modal-header {
+  border-bottom: 1px solid #d4bd13 !important;
+}
+
+.modal-title {
+  color: #d4bd13 !important;
+}
+
+.modal-footer {
+  border-top: 1px solid #d4bd13 !important;
+}
+
+.modal-close {
+  color: #fff !important;
+}
+
+.modal-close:hover {
+  color: #d4bd13 !important;
+}
+
+.modal-input {
+  background-color: #1e272e !important;
+  border: 1px solid #d4bd13 !important;
+  color: #fff !important;
+}
+
+.modal-input:focus {
+  background-color: #1e272e !important;
+  border-color: #d4bd13 !important;
+  color: #fff !important;
+  box-shadow: 0 0 0 0.2rem rgba(212, 189, 19, 0.25) !important;
+}
+
+.modal-input::placeholder {
+  color: #666 !important;
+}
+
+.modal-btn-primary {
+  background-color: #d4bd13 !important;
+  border-color: #d4bd13 !important;
+  color: #2d3a3f !important;
+}
+
+.modal-btn-primary:hover {
+  background-color: #b3a010 !important;
+  border-color: #b3a010 !important;
+}
+
+.modal-btn-secondary {
+  background-color: #1e272e !important;
+  border-color: #d4bd13 !important;
+  color: #d4bd13 !important;
+}
+
+.modal-btn-secondary:hover {
+  background-color: #2d3a3f !important;
+  border-color: #b3a010 !important;
+  color: #b3a010 !important;
+}
+
+.modal-btn-danger {
+  background-color: #dc3545 !important;
+  border-color: #dc3545 !important;
+  color: #fff !important;
+}
+
+.modal-btn-danger:hover {
+  background-color: #c82333 !important;
+  border-color: #bd2130 !important;
+} 

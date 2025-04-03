@@ -9,6 +9,7 @@
     "css-loader": "^7.1.2",
     "react": "^19.0.0",
     "react-big-calendar": "^1.18.0",
+    "react-bootstrap": "^2.10.9",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.1.1",
     "react-scripts": "5.0.1",
